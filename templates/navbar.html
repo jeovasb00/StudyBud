@@ -6,4 +6,11 @@
     <input type="text" name="q" placeholder="procurar sala" />
 </form>
 
+{% if request.user.is_authenticated %}
+<a href="{% url 'logout' %}">Deslogar</a>
+{% else %}
+
+<a href="{% url 'login' %}">Fazer Login</a>
+{% endif %}
+
 <hr>
