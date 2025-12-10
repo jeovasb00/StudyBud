@@ -6,4 +6,16 @@
 
 <h3>{{room.description}}</h3>
 
+<div class="comment-wrapper">
+    <h3>Coversação</h3>
+    <hr>
+
+    {% for message in roomMessages %}
+        <div>
+            <small>@{{message.user}} {{message.created}} </small>
+            <p> {{message.body}} </p>
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

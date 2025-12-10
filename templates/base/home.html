@@ -29,12 +29,12 @@
 
     <div>
         <h4>{{room_count}} salas encontradas</h4>
-        <a href="{% url 'create-room' %}">Create new Room</a>
+        <a href="{% url 'create-room' %}">Criar nova sala</a>
         <div>
             {% for room in rooms %}
                 <div>
                     {% if request.user == room.host %}
-                    <a href="{% url 'update-room' room.id %}">Edit Room</a>
+                    <a href="{% url 'update-room' room.id %}">Editar Sala</a>
                     {% endif %}
                     <span>@{{room.host.username}}</span>
                     <h4>
@@ -43,7 +43,7 @@
                     <small>{{room.topic.name}}</small>
                     <br>
                     {% if request.user == room.host %}
-                    <a href="{% url 'delete-room' room.id %}">Delete Room</a>
+                    <a href="{% url 'delete-room' room.id %}">Deletar Sala</a>
                     {% endif %}
                     <hr>
                 </div>
