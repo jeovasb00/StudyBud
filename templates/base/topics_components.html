@@ -1,0 +1,13 @@
+<h3>Buscar tópicos</h3>
+<hr>
+
+<div>
+    <a href="{% url 'home' %}">*Todos</a>
+</div>
+<br>
+
+{% for topic in topics %}
+<div>
+    <a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+</div>
+{% endfor %}
