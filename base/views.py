@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .models import Room, Topic, Message
-from .forms import RoomForm, UserForm
+from .models import Room, Topic, Message, User
+from .forms import RoomForm, UserForm, MyUserCreationForm
 
 def loginPage(request):
     page = 'login'
@@ -15,15 +13,15 @@ def loginPage(request):
         return redirect('home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
 
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             messages.error(request, 'Usuário inexistente')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
 
         if user is not None:
             login(request, user)
@@ -41,13 +39,13 @@ def logoutUser(request):
 
 
 def registerPage(request):
-    form = UserCreationForm()
+    form = MyUserCreationForm()
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = user.username.lower()
+            user.email = user.email.lower()
             user.save()
             login(request, user)
             return redirect('home')
@@ -65,7 +63,7 @@ def home(request):
         Q(description__icontains=q)
     )
     
-    topics = Topic.objects.all()[0:3]
+    topics = Topic.objects.annotate(room_count=Count('room')).filter(room_count__gt=0)[:3]
     room_count = rooms.count()
     roomMessages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
@@ -170,7 +168,7 @@ def updateUser(request):
     form = UserForm(instance=user)
 
     if request.method == 'POST':
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk=user.id)

@@ -15,11 +15,11 @@
               </path>
             </svg>
           </a>
-          <h3>Edit your profile</h3>
+          <h3>Edite sua Conta</h3>
         </div>
       </div>
       <div class="layout__body">
-        <form class="form" action="" method="POST">
+        <form class="form" action="" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
           {% for field in form %}
@@ -30,8 +30,8 @@
           {% endfor %}
 
           <div class="form__action">
-            <a class="btn btn--dark" href="index.html">Cancel</a>
-            <button class="btn btn--main" type="submit">Update</button>
+            <a class="btn btn--dark" href="index.html">Cancelar</a>
+            <button class="btn btn--main" type="submit">Atualizar</button>
           </div>
         </form>
       </div>

@@ -1,6 +1,6 @@
 <div class="activities">
     <div class="activities__header">
-        <h2>Recent Activities</h2>
+        <h2>Atividades Recentes</h2>
     </div>
 
     {% for message in roomMessages %}
@@ -8,7 +8,7 @@
         <div class="activities__boxHeader roomListRoom__header">
             <a href="{% url 'user-profile' message.user.id %}" class="roomListRoom__author">
                 <div class="avatar avatar--small">
-                    <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                    <img src="{{message.user.avatar.url}}" />
                 </div>
                 <p>
                     @{{message.user}}
@@ -30,7 +30,7 @@
             {% endif %}
         </div>
         <div class="activities__boxContent">
-            <p>replied to post “<a href="{% url 'room' message.room.id %}">{{message.room}}</a>”</p>
+            <p>respondeu ao post “<a href="{% url 'room' message.room.id %}">{{message.room}}</a>”</p>
             <div class="activities__boxRoomContent">
                 {{message.body}}
             </div>
