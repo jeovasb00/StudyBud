@@ -18,7 +18,7 @@
         </form>
         <nav class="header__menu">
 
-            <!-- Logged In -->
+            <!-- Logado -->
             {% if request.user.is_authenticated %}
             <div class="header__user">
                 <a href="{% url 'user-profile' request.user.id %}">
@@ -38,7 +38,7 @@
             </div>
 
             {% else %}
-            <!-- Not Logged In -->
+            <!-- Não Logado -->
             <a href="{% url 'login' %}">
                 <img src="{% static 'images/avatar.svg' %}" />
                 <p>Login</p>

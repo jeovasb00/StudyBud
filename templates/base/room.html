@@ -3,7 +3,7 @@
 {% block content %}
     <main class="profile-page layout layout--2">
       <div class="container">
-        <!-- Room Start -->
+        <!-- Início da sala -->
         <div class="room">
           <div class="room__top">
             <div class="room__topLeft">
@@ -113,16 +113,19 @@
               </div>
             </div>
           </div>
+
+          {% if request.user.is_authenticated %}
           <div class="room__message">
             <form action="" method="POST">
               {% csrf_token %}
               <input name="body" placeholder="Escreva sua mensagem aqui..." />
             </form>
           </div>
+          {% endif %}
         </div>
-        <!-- Room End -->
+        <!-- Fim da sala -->
 
-        <!--   Start -->
+        <!-- Início dos participantes -->
         <div class="participants">
           <h3 class="participants__top">Participantes <span>({{participants.count}})</span></h3>
           <div class="participants__list scroll">
@@ -139,7 +142,7 @@
             {% endfor %}
           </div>
         </div>
-        <!--  End -->
+        <!--  Fim dos participantes -->
       </div>
     </main>
     <script src="script.js"></script>

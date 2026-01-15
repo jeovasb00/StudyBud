@@ -49,8 +49,6 @@ def registerPage(request):
             user.save()
             login(request, user)
             return redirect('home')
-        else:
-            messages.error(request, 'Ocorreu um erro durante o registro')
     
     return render(request, 'base/login_register.html', {'form': form})
 
@@ -92,14 +90,14 @@ def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all()
     roomMessages = user.message_set.all()
-    topics = Topic.objects.all()
+    topics = Topic.objects.annotate(room_count=Count('room')).filter(room_count__gt=0)[:3]
     context = {'user': user, 'rooms': rooms, 'roomMessages': roomMessages, 'topics': topics}
     return render(request, 'base/profile.html', context)
 
 @login_required(login_url='/login')
 def createRoom(request):
     form = RoomForm()
-    topics = Topic.objects.all()
+    topics = Topic.objects.annotate(room_count=Count('room')).filter(room_count__gt=0)[:3]
     if request.method == 'POST':
         topic_name = request.POST.get('topic')
         topic, created = Topic.objects.get_or_create(name=topic_name)
@@ -120,7 +118,7 @@ def createRoom(request):
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
-    topics = Topic.objects.all()
+    topics = Topic.objects.annotate(room_count=Count('room')).filter(room_count__gt=0)[:3]
 
     if request.user != room.host:
         return HttpResponse('Você não tem acesso a esta sala')
@@ -177,7 +175,7 @@ def updateUser(request):
 
 def topicsPage(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
-    topics = Topic.objects.filter(name__icontains=q)
+    topics = (Topic.objects.annotate(room_count=Count('room')).filter(room_count__gt=0, name__icontains=q))
     return render(request, 'base/topics.html', {'topics':topics})
 
 def activityPage(request):
